@@ -1,4 +1,4 @@
-User-agent: *
+﻿User-agent: *
 Allow: /
 
-Sitemap: https://TU-DOMINIO-OFICIAL.com/sitemap.xml
+Sitemap: https://machine-web.netlify.app/sitemap.xml
