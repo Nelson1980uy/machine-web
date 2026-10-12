@@ -1773,7 +1773,7 @@
   position: fixed;
   z-index: 120;
   right: 20px;
-  bottom: 135px;
+  bottom: 155px;
 
   display: inline-flex;
   min-height: 48px;
@@ -2744,5 +2744,385 @@
   .machine-site .machine-feature-card:hover,
   .machine-site .machine-back-to-top:hover {
     transform: none;
+  }
+}
+
+/* =========================================================
+   MACHINE ACCESS CENTER
+   ========================================================= */
+
+.machine-download-operator {
+  display: block;
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 20px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 16px rgba(0, 170, 255, 0.25));
+}
+
+.machine-download-card button {
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.machine-download-card button:hover {
+  transform: translateY(-2px);
+}
+
+/* Overlay */
+
+.machine-access-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+  background: rgba(2, 5, 10, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: machineAccessFadeIn 0.25s ease both;
+}
+
+/* Modal */
+
+.machine-access-modal {
+  position: relative;
+  width: min(100%, 440px);
+  padding: 34px 28px 24px;
+  overflow: hidden;
+  color: #edf7ff;
+  text-align: center;
+  background:
+    radial-gradient(
+      circle at 50% 25%,
+      rgba(0, 153, 255, 0.12),
+      transparent 42%
+    ),
+    linear-gradient(145deg, #101b29, #060a11 75%);
+  border: 1px solid rgba(67, 183, 255, 0.48);
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 1px rgba(0, 140, 255, 0.08),
+    0 0 50px rgba(0, 115, 255, 0.16),
+    0 25px 90px rgba(0, 0, 0, 0.6);
+  animation: machineAccessAppear 0.35s ease both;
+}
+
+.machine-access-close {
+  position: absolute;
+  top: 10px;
+  right: 13px;
+  width: 36px;
+  height: 36px;
+  color: #9db4c9;
+  font-size: 27px;
+  line-height: 1;
+  background: transparent;
+  border: 1px solid rgba(150, 190, 220, 0.18);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.machine-access-close:hover {
+  color: #ffffff;
+  border-color: #48baff;
+}
+
+.machine-access-code {
+  display: block;
+  padding: 0 28px;
+  color: #65c9ff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  line-height: 1.8;
+}
+
+/* Operator frame */
+
+.machine-access-operator-frame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 150px;
+  height: 150px;
+  margin: 25px auto 22px;
+  overflow: hidden;
+  background: rgba(0, 123, 255, 0.055);
+  border: 1px solid rgba(59, 180, 255, 0.42);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 0 30px rgba(0, 140, 255, 0.08),
+    0 0 30px rgba(0, 145, 255, 0.08);
+}
+
+.machine-access-operator {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  object-fit: contain;
+  animation: machineOperatorPulse 2.8s ease-in-out infinite;
+}
+
+.machine-access-scan {
+  position: absolute;
+  top: -10%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  pointer-events: none;
+  background: #45c5ff;
+  box-shadow: 0 0 12px #159dff;
+  animation: machineAccessScan 2.8s linear infinite;
+}
+
+/* Status */
+
+.machine-access-modal h2 {
+  margin: 0 0 12px;
+  color: #ffffff;
+  font-size: clamp(19px, 4vw, 25px);
+  font-weight: 900;
+  letter-spacing: 1.2px;
+}
+
+.machine-access-description {
+  min-height: 42px;
+  margin: 0 0 20px;
+  color: #a8bdcf;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* Progress bar */
+
+.machine-access-progress-track {
+  width: 100%;
+  height: 8px;
+  overflow: hidden;
+  background: #1a2938;
+  border: 1px solid rgba(88, 167, 220, 0.2);
+  border-radius: 20px;
+}
+
+.machine-access-progress-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #0878ff, #49d5ff);
+  border-radius: inherit;
+  box-shadow: 0 0 14px rgba(36, 174, 255, 0.7);
+  transition: width 0.06s linear;
+}
+
+.machine-access-progress-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  color: #7fa5c0;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.machine-access-progress-info strong {
+  color: #69d5ff;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Enter button */
+
+.machine-access-enter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 50px;
+  margin-top: 26px;
+  padding: 14px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-decoration: none;
+  background: linear-gradient(100deg, #086bdb, #079fda);
+  border: 1px solid rgba(113, 220, 255, 0.75);
+  border-radius: 9px;
+  box-shadow: 0 0 24px rgba(0, 135, 255, 0.2);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.machine-access-enter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(0, 160, 255, 0.38);
+}
+
+.machine-access-wait {
+  margin-top: 26px;
+  padding: 14px 8px;
+  color: #6e93ae;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.machine-access-footer {
+  display: block;
+  margin-top: 20px;
+  color: #506a80;
+  font-size: 9px;
+  letter-spacing: 1.4px;
+}
+
+/* Animations */
+
+@keyframes machineAccessFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes machineAccessAppear {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes machineAccessScan {
+  from { top: -5%; }
+  to { top: 105%; }
+}
+
+@keyframes machineOperatorPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 3px rgba(0, 157, 255, 0.15));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(0, 174, 255, 0.5));
+  }
+}
+
+/* Responsive */
+
+@media (max-width: 480px) {
+  .machine-access-overlay {
+    padding: 12px;
+  }
+
+  .machine-access-modal {
+    padding: 30px 20px 20px;
+    border-radius: 14px;
+  }
+
+  .machine-access-operator-frame {
+    width: 125px;
+    height: 125px;
+    margin-top: 20px;
+  }
+
+  .machine-access-code {
+    font-size: 9px;
+    letter-spacing: 1.2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .machine-access-overlay,
+  .machine-access-modal,
+  .machine-access-operator,
+  .machine-access-scan {
+    animation: none;
+  }
+
+  .machine-access-enter,
+  .machine-download-card button {
+    transition: none;
+  }
+}
+
+
+/* =========================================================
+   MACHINE — MARCO HOLOGRÁFICO DEL OPERADOR
+   ========================================================= */
+
+.machine-download-operator {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 0 8px rgba(0, 174, 255, 0.35));
+}
+
+.machine-download-card {
+  position: relative;
+}
+
+.machine-download-card .machine-download-operator {
+  box-sizing: border-box;
+  width: 112px;
+  height: 112px;
+  margin: 0 auto 22px;
+  padding: 10px;
+  background:
+    linear-gradient(145deg, #101f30, #050a12);
+  border: 1px solid rgba(61, 190, 255, 0.75);
+  border-radius: 12px;
+  outline: 1px solid rgba(61, 190, 255, 0.16);
+  outline-offset: 4px;
+  box-shadow:
+    inset 0 0 18px rgba(0, 153, 255, 0.12),
+    0 0 18px rgba(0, 153, 255, 0.12);
+  animation: machineOperatorGlow 3s ease-in-out infinite;
+}
+
+/* Esquinas luminosas */
+.machine-download-card .machine-download-operator {
+  clip-path: none;
+}
+
+/* Marco de la ventana de acceso */
+.machine-access-operator-frame {
+  border: 1px solid rgba(61, 190, 255, 0.8);
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 22px rgba(0, 153, 255, 0.13),
+    0 0 0 4px rgba(61, 190, 255, 0.06),
+    0 0 24px rgba(0, 153, 255, 0.15);
+}
+
+/* Brillo suave del marco */
+@keyframes machineOperatorGlow {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 12px rgba(0, 153, 255, 0.08),
+      0 0 10px rgba(0, 153, 255, 0.10);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 0 22px rgba(0, 153, 255, 0.18),
+      0 0 22px rgba(0, 153, 255, 0.25);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .machine-download-card .machine-download-operator {
+    animation: none;
   }
 }

@@ -11,6 +11,58 @@ function App() {
   const [showBackToTop, setShowBackToTop] =
     useState(false);
 
+      // =========================================================
+  // MACHINE DOWNLOAD CENTER
+  // =========================================================
+
+  const [showDownloadModal, setShowDownloadModal] =
+    useState(false);
+
+  const [downloadProgress, setDownloadProgress] =
+    useState(0);
+
+  const [downloadReady, setDownloadReady] =
+    useState(false);
+
+  const openDownloadModal = () => {
+    setDownloadProgress(0);
+    setDownloadReady(false);
+    setShowDownloadModal(true);
+  };
+
+  const closeDownloadModal = () => {
+    setShowDownloadModal(false);
+  };
+
+  useEffect(() => {
+    if (!showDownloadModal) {
+      return undefined;
+    }
+
+    setDownloadProgress(0);
+    setDownloadReady(false);
+
+    let progress = 0;
+
+    const interval = window.setInterval(() => {
+      progress = Math.min(progress + 2, 100);
+
+      setDownloadProgress(progress);
+
+      if (progress >= 100) {
+        window.clearInterval(interval);
+        setDownloadReady(true);
+      }
+    }, 60);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [showDownloadModal]);
+
+
+
+
   useEffect(() => {
 
     const handleScroll = () => {
@@ -37,6 +89,10 @@ function App() {
     };
 
   }, []);
+
+
+
+
 
 
   // =========================================================
@@ -732,17 +788,17 @@ function App() {
         </section>
 
 
-        {/* =================================================
-            DESCARGAS
+                {/* =================================================
+            DESCARGAS MACHINE
            ================================================= */}
 
+        
         <section
           id="descargas"
           className="machine-section machine-download-section"
         >
-
           <span className="machine-section-label">
-            03 · DOWNLOAD CENTER
+            03 · MACHINE ACCESS CENTER
           </span>
 
           <h2>
@@ -750,58 +806,66 @@ function App() {
           </h2>
 
           <p>
-
-            Los enlaces oficiales de distribución
-            estarán disponibles cuando las versiones
-            correspondientes estén listas.
-
+            Accede a la plataforma oficial MACHINE desde tu
+            ordenador o dispositivo móvil.
           </p>
-
 
           <div className="machine-download-grid">
 
-            <div className="machine-download-card">
+            {/* DESCARGA PARA WINDOWS */}
+            <article className="machine-download-card">
+              <img
+                src={operador}
+                alt="Operador oficial de MACHINE"
+                className="machine-download-operator"
+              />
 
               <strong>
                 MACHINE · WINDOWS
               </strong>
 
               <span>
-                Aplicación para PC
+                Descarga el instalador de MACHINE para tu PC con Windows.
               </span>
 
-              <button
-                type="button"
-                disabled
+              <a
+                href="https://github.com/Nelson1980uy/machine/releases/download/untagged-4bb1242a99fb1a82fdd9/MACHINE-Setup-0.0.0.1.exe"
+                className="machine-download-button"
+                download
               >
-                PRÓXIMAMENTE
-              </button>
+                DESCARGAR PARA WINDOWS
+              </a>
+            </article>
 
-            </div>
-
-
-            <div className="machine-download-card">
+            {/* ACCESO A MACHINE ONLINE */}
+            <article className="machine-download-card">
+              <img
+                src={operador}
+                alt="Operador oficial de MACHINE"
+                className="machine-download-operator"
+              />
 
               <strong>
-                MACHINE · MOBILE
+                MACHINE · WEB
               </strong>
 
               <span>
-                Aplicación para dispositivos móviles
+                Accede a MACHINE desde tu navegador, sin instalar el programa.
               </span>
 
-              <button
-                type="button"
-                disabled
+              <a
+                href="https://machine-official.netlify.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="machine-download-button"
               >
-                PRÓXIMAMENTE
-              </button>
-
-            </div>
+                ENTRAR A MACHINE ONLINE
+              </a>
+            </article>
 
           </div>
-
         </section>
+
 
 
         {/* =================================================
@@ -2175,7 +2239,116 @@ function App() {
 
       )}
 
+            {/* =================================================
+          MACHINE ACCESS MODAL
+         ================================================= */}
+
+      {showDownloadModal && (
+        <div
+          className="machine-access-overlay"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) {
+              closeDownloadModal();
+            }
+          }}
+        >
+          <section
+            className="machine-access-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="machine-access-title"
+          >
+            <button
+              type="button"
+              className="machine-access-close"
+              onClick={closeDownloadModal}
+              aria-label="Cerrar ventana"
+            >
+              ×
+            </button>
+
+            <span className="machine-access-code">
+              MACHINE CORE / ACCESS TERMINAL
+            </span>
+
+            <div className="machine-access-operator-frame">
+              <img
+                src={operador}
+                alt="Operador MACHINE"
+                className="machine-access-operator"
+              />
+
+              <span className="machine-access-scan" />
+            </div>
+
+            <h2 id="machine-access-title">
+              {downloadReady
+                ? "SISTEMA PREPARADO"
+                : "INICIALIZANDO MACHINE"}
+            </h2>
+
+            <p className="machine-access-description">
+              {downloadReady
+                ? "El acceso a la plataforma oficial está preparado."
+                : downloadProgress < 35
+                  ? "Inicializando interfaz de acceso..."
+                  : downloadProgress < 70
+                    ? "Preparando los módulos de acceso..."
+                    : "Finalizando la preparación del sistema..."}
+            </p>
+
+            <div
+              className="machine-access-progress-track"
+              role="progressbar"
+              aria-label="Preparación del acceso"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={downloadProgress}
+            >
+              <span
+                className="machine-access-progress-fill"
+                style={{
+                  width: `${downloadProgress}%`,
+                }}
+              />
+            </div>
+
+            <div className="machine-access-progress-info">
+              <span>
+                {downloadReady ? "READY" : "PREPARANDO ACCESO"}
+              </span>
+
+              <strong>
+                {downloadProgress}%
+              </strong>
+            </div>
+
+            {downloadReady ? (
+              <a
+                className="machine-access-enter"
+                href="https://machine-official.netlify.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ENTRAR A MACHINE
+                <span aria-hidden="true"> ↗</span>
+              </a>
+            ) : (
+              <div className="machine-access-wait">
+                ESPERANDO AUTORIZACIÓN DEL SISTEMA...
+              </div>
+            )}
+
+            <span className="machine-access-footer">
+              MACHINE OFFICIAL SYSTEM · 2026
+            </span>
+          </section>
+        </div>
+      )}
+
     </div>
+
+    
   );
 }
 
