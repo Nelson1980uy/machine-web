@@ -829,7 +829,7 @@ function App() {
               </span>
 
               <a
-                href="https://github.com/Nelson1980uy/machine/releases/download/untagged-4bb1242a99fb1a82fdd9/MACHINE-Setup-0.0.0.1.exe"
+                href="https://github.com/Nelson1980uy/machine-releases/releases/download/v0.0.4/MACHINE-Setup-0.0.4.exe"
                 className="machine-download-button"
                 download
               >
