@@ -6,10 +6,53 @@ import {
   useState,
 } from "react";
 
+
+
+const MACHINE_RELEASES_API =
+  "https://api.github.com/repos/Nelson1980uy/machine-releases/releases/latest";
+
+async function getLatestMachineRelease() {
+  const response = await fetch(MACHINE_RELEASES_API, {
+    headers: {
+      Accept: "application/vnd.github+json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      "No se pudo consultar la última versión de MACHINE."
+    );
+  }
+
+  const release = await response.json();
+
+  const installer = release.assets?.find((asset) =>
+    /^MACHINE-Setup-.*\.exe$/i.test(asset.name)
+  );
+
+  if (!installer || release.draft || release.prerelease) {
+    throw new Error(
+      "La última publicación no contiene un instalador estable de MACHINE."
+    );
+  }
+
+  return {
+    version: release.tag_name,
+    downloadUrl: installer.browser_download_url,
+  };
+}
+
+
 function App() {
 
   const [showBackToTop, setShowBackToTop] =
     useState(false);
+
+    
+const [latestRelease, setLatestRelease] = useState(null);
+const [releaseLoading, setReleaseLoading] = useState(true);
+const [releaseError, setReleaseError] = useState("");
+
 
       // =========================================================
   // MACHINE DOWNLOAD CENTER
@@ -400,7 +443,7 @@ function App() {
         <div className="machine-brand">
 
           <div
-            className="machine-brand-mark notranslate"
+            className="machine-empty-symbol notranslate"
             translate="no"
           >
             M
@@ -788,83 +831,150 @@ function App() {
         </section>
 
 
-                {/* =================================================
-            DESCARGAS MACHINE
-           ================================================= */}
+           
+      
+    {/* =================================================
+        DESCARGAS MACHINE
+       ================================================= */}
 
-        
-        <section
-          id="descargas"
-          className="machine-section machine-download-section"
-        >
-          <span className="machine-section-label">
-            03 · MACHINE ACCESS CENTER
+    <section
+      id="descargas"
+      className="machine-section machine-download-section"
+    >
+      <span className="machine-section-label">
+        03 · MACHINE ACCESS CENTER
+      </span>
+
+      <h2>
+        DESCARGAR MACHINE
+      </h2>
+
+      <p>
+        Accede a la plataforma oficial MACHINE desde tu
+        ordenador, tablet o dispositivo móvil.
+      </p>
+
+      <div className="machine-download-grid">
+
+        {/* DESCARGA PARA WINDOWS */}
+        <article className="machine-download-card">
+
+          <img
+            src={operador}
+            alt="Operador oficial de MACHINE"
+            className="machine-download-operator"
+          />
+
+          <strong>
+            MACHINE · WINDOWS
+          </strong>
+
+          <span>
+            Descarga el instalador oficial de MACHINE
+            para tu PC con Windows.
           </span>
 
-          <h2>
-            DESCARGAR MACHINE
-          </h2>
-
-          <p>
-            Accede a la plataforma oficial MACHINE desde tu
-            ordenador o dispositivo móvil.
-          </p>
-
-          <div className="machine-download-grid">
-
-            {/* DESCARGA PARA WINDOWS */}
-            <article className="machine-download-card">
-              <img
-                src={operador}
-                alt="Operador oficial de MACHINE"
-                className="machine-download-operator"
-              />
-
-              <strong>
-                MACHINE · WINDOWS
-              </strong>
-
-              <span>
-                Descarga el instalador de MACHINE para tu PC con Windows.
+          {releaseLoading ? (
+            <button
+              type="button"
+              className="machine-download-button"
+              disabled
+            >
+              CONSULTANDO VERSIÓN...
+            </button>
+          ) : latestRelease ? (
+            <>
+              <span className="machine-download-version">
+                VERSIÓN DISPONIBLE: {latestRelease.version}
               </span>
 
               <a
-                href="https://github.com/Nelson1980uy/machine-releases/releases/download/v0.0.4/MACHINE-Setup-0.0.4.exe"
+                href={latestRelease.downloadUrl}
                 className="machine-download-button"
-                download
               >
                 DESCARGAR PARA WINDOWS
               </a>
-            </article>
+            </>
+          ) : (
+            <div role="status">
+              <p>
+                {releaseError ||
+                  "El instalador no está disponible temporalmente."}
+              </p>
 
-            {/* ACCESO A MACHINE ONLINE */}
-            <article className="machine-download-card">
-              <img
-                src={operador}
-                alt="Operador oficial de MACHINE"
-                className="machine-download-operator"
-              />
-
-              <strong>
-                MACHINE · WEB
-              </strong>
-
-              <span>
-                Accede a MACHINE desde tu navegador, sin instalar el programa.
-              </span>
-
-              <a
-                href="https://machine-official.netlify.app/"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
                 className="machine-download-button"
+                onClick={() => window.location.reload()}
               >
-                ENTRAR A MACHINE ONLINE
-              </a>
-            </article>
+                REINTENTAR
+              </button>
+            </div>
+          )}
 
-          </div>
-        </section>
+        </article>
+
+        {/* ACCESO PARA DISPOSITIVOS MÓVILES */}
+        <article className="machine-download-card">
+
+          <img
+            src={operador}
+            alt="Operador oficial de MACHINE"
+            className="machine-download-operator"
+          />
+
+          <strong>
+            MACHINE · MÓVIL
+          </strong>
+
+          <span>
+            Accede desde Android o iPhone y utiliza MACHINE
+            desde el navegador de tu dispositivo.
+          </span>
+
+          <a
+            href="https://machine-official.netlify.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="machine-download-button"
+          >
+            ACCEDER DESDE EL MÓVIL
+          </a>
+
+        </article>
+
+        {/* ACCESO A MACHINE ONLINE */}
+        <article className="machine-download-card">
+
+          <img
+            src={operador}
+            alt="Operador oficial de MACHINE"
+            className="machine-download-operator"
+          />
+
+          <strong>
+            MACHINE · WEB
+          </strong>
+
+          <span>
+            Accede a MACHINE desde tu navegador, sin instalar
+            el programa de escritorio.
+          </span>
+
+          <a
+            href="https://machine-official.netlify.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="machine-download-button"
+          >
+            ENTRAR A MACHINE ONLINE
+          </a>
+
+        </article>
+
+      </div>
+    </section>
+
 
 
 
@@ -1466,30 +1576,36 @@ function App() {
 
             <details className="machine-faq-item">
 
-              <summary>
-                ¿CUÁNDO PODRÉ DESCARGAR MACHINE?
-              </summary>
+             
+<summary>
+  ¿DÓNDE PUEDO DESCARGAR MACHINE?
+</summary>
 
-              <p>
-                Los enlaces oficiales aparecerán cuando
-                las versiones correspondientes estén listas
-                y verificadas para distribución.
-              </p>
+<p>
+  MACHINE ya está disponible para Windows y también
+  puedes acceder a su plataforma web desde tu navegador.
+  Visita el centro de acceso oficial para descargar
+  la aplicación de escritorio o entrar a MACHINE Online.
+</p>
 
             </details>
 
 
             <details className="machine-faq-item">
 
-              <summary>
-                ¿MACHINE FUNCIONARÁ EN PC Y MÓVIL?
-              </summary>
+             
+<summary>
+  ¿MACHINE ESTÁ DISPONIBLE PARA PC Y MÓVILES?
+</summary>
 
-              <p>
-                La página oficial contará con espacios
-                destinados a las versiones compatibles
-                de PC y dispositivos móviles.
-              </p>
+<p>
+  Sí. Puedes acceder a MACHINE desde tu PC o dispositivo
+  móvil a través de la plataforma web oficial, utilizando
+  un navegador compatible. La aplicación de escritorio
+  está disponible para Windows y ofrece una experiencia
+  diseñada para el entorno industrial.
+</p>
+
 
             </details>
 
