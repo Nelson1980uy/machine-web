@@ -54,6 +54,49 @@ const [releaseLoading, setReleaseLoading] = useState(true);
 const [releaseError, setReleaseError] = useState("");
 
 
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadLatestRelease = async () => {
+      setReleaseLoading(true);
+      setReleaseError("");
+
+      try {
+        const release = await getLatestMachineRelease();
+
+        if (!cancelled) {
+          setLatestRelease(release);
+        }
+      } catch (error) {
+        console.error(
+          "MACHINE RELEASE CHECK ERROR:",
+          error
+        );
+
+        if (!cancelled) {
+          setLatestRelease(null);
+          setReleaseError(
+            error instanceof Error
+              ? error.message
+              : "No se pudo consultar la versión de MACHINE."
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setReleaseLoading(false);
+        }
+      }
+    };
+
+    loadLatestRelease();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+
+
       // =========================================================
   // MACHINE DOWNLOAD CENTER
   // =========================================================
