@@ -914,34 +914,37 @@ const [releaseError, setReleaseError] = useState("");
 
         </article>
 
-        {/* ACCESO PARA DISPOSITIVOS MÓVILES */}
-        <article className="machine-download-card">
+        
+      {/* DESCARGA DE LA APLICACIÓN ANDROID */}
+      <article className="machine-download-card">
+        <img
+          src={operador}
+          alt="Operador oficial de MACHINE"
+          className="machine-download-operator"
+        />
 
-          <img
-            src={operador}
-            alt="Operador oficial de MACHINE"
-            className="machine-download-operator"
-          />
+        <strong>MACHINE · ANDROID</strong>
 
-          <strong>
-            MACHINE · MÓVIL
-          </strong>
+        <span>
+          Descarga la aplicación oficial de MACHINE para
+          dispositivos Android e instálala en tu dispositivo.
+        </span>
 
-          <span>
-            Accede desde Android o iPhone y utiliza MACHINE
-            desde el navegador de tu dispositivo.
-          </span>
+        
+<a
+  href="/downloads/MACHINE-Android.apk"
+  className="machine-download-button"
+  download="MACHINE-Android.apk"
+>
+  DESCARGAR APP PARA ANDROID
+</a>
 
-          <a
-            href="https://machine-official.netlify.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="machine-download-button"
-          >
-            ACCEDER DESDE EL MÓVIL
-          </a>
 
-        </article>
+        <small>
+          Archivo de instalación APK para Android.
+        </small>
+      </article>
+
 
         {/* ACCESO A MACHINE ONLINE */}
         <article className="machine-download-card">
