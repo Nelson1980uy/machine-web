@@ -974,13 +974,14 @@ const [releaseError, setReleaseError] = useState("");
         </span>
 
         
+
 <a
-  href="/downloads/MACHINE-Android.apk"
+  href="https://github.com/Nelson1980uy/machine-releases/releases/latest/download/MACHINE-Android.apk"
   className="machine-download-button"
-  download="MACHINE-Android.apk"
 >
   DESCARGAR APP PARA ANDROID
 </a>
+
 
 
         <small>
